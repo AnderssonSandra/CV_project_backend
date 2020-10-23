@@ -19,7 +19,7 @@ class Educations {
 
     //get all projects from database
     function getAll() {
-        $query = "SELECT * FROM cv_education";
+        $query = "SELECT * FROM cv_education ORDER BY CASE WHEN endDate = '0000-00-00' THEN 0 ELSE 1 END, endDate DESC";
 
         //prepare and execute statement
         $statement = $this->conn->prepare($query);

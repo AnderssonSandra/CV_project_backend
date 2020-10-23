@@ -59,6 +59,10 @@ switch($method) {
             $educations->endDate = $data->endDate;
             $educations->description = $data->description;
         
+            //set NULL if endDate empty
+            if (empty($educations->endDate)) {
+                $educations->endDate = NULL;
+           }
             //create user
             if($educations->create()) {
                 http_response_code(201); //created

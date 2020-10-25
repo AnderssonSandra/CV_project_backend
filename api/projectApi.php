@@ -48,8 +48,6 @@ switch($method) {
         //send data to props in class "projects" if it isn't empty
         if(
             !empty($data->name) &&
-            !empty($data->link) &&
-            !empty($data->techniques) &&
             !empty($data->startDate) &&
             !empty($data->description)
         ){

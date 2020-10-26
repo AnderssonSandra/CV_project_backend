@@ -1,9 +1,17 @@
 <?php
 //require files
-require '../config/Database.php';
-require '../classes/Users.php';
-require '../classes/ReusableApi.php';
+require 'config/Database.php';
+require 'classes/Users.php';
+require 'classes/ReusableApi.php';
 
+// require files to encode json web token
+include_once 'config/core.php';
+include_once 'libs/php-jwt-master/src/BeforeValidException.php';
+include_once 'libs/php-jwt-master/src/ExpiredException.php';
+include_once 'libs/php-jwt-master/src/SignatureInvalidException.php';
+include_once 'libs/php-jwt-master/src/JWT.php';
+use \Firebase\JWT\JWT;
+ 
 //create instace of reusable class
 $reusableApi = new ReusableApi();
 
@@ -25,7 +33,7 @@ $db = $database->connect();
 //Create an instance of the class "Users" and send the db connection as a parameter 
 $users = new Users($db);
 
-//swish that us the encloses method
+//switch method
 switch($method) {
     //GET
     case 'GET':
@@ -47,14 +55,14 @@ switch($method) {
         //send data to props in class "users" if it isn't empty
         if(
             !empty($data->email) &&
-            !empty($data->phone) &&
-            !empty($data->password) &&
-            !empty($data->description)
+            !empty($data->firstname) &&
+            !empty($data->lastname) &&
+            !empty($data->password) 
         ){
             $users->email = $data->email;
-            $users->phone = $data->phone;
+            $users->firstname = $data->firstname;
+            $users->lastname = $data->lastname;
             $users->password = $data->password;
-            $users->description = $data->description;
         
             //create user
             if($users->create()) {
@@ -65,48 +73,99 @@ switch($method) {
                 $result = array("message" => "Det gick tyvärr inte att skapa kursen");
             };
         }
-        break;
-        //PUT
-        case 'PUT':
-            //error because no id
-            if(!isset($id)) {
-                http_response_code(510); //not extended
-                $result = array("message" => "kunde inte uppdatera kursen eftersom inget id skickades med");
-            } else {
-                $data = json_decode(file_get_contents("php://input"));
+    break;
+    //PUT
+    case 'PUT':
+        // get posted data
+        $data = json_decode(file_get_contents("php://input"));
+        
+        // get jwt
+        $jwt=isset($data->jwt) ? $data->jwt : "";
 
-                //send data to props in class "users"
-                $users->code = $data->email;
-                $users->phone = $data->phone;
+        if($jwt){
+            // if decode succeed, show user details
+            try {
+                // decode jwt
+                $decoded = JWT::decode($jwt, $key, array('HS256'));
+         
+                // set user props
+                $users->firstname = $data->firstname;
+                $users->lastname = $data->lastname;
+                $users->email = $data->email;
                 $users->password = $data->password;
-                $users->description = $data->description;
-
-                //update 
-                if($users->update($id)) {
-                    http_response_code(200); //ok
-                    $result = array("message" => "poesten är uppdaterad");
-                } else {
-                    http_response_code(503); //server error
-                    $result = array("message" => "det gick inte att uppdatera posten");
+                $users->id = $decoded->data->id;
+                
+                // update the user record
+                if($users->update()){
+                    //re-generate jwt
+                    $token = array(
+                        "iat" => $issued_at,
+                        "exp" => $expiration_time,
+                        "iss" => $issuer,
+                        "data" => array(
+                            "id" => $users->id,
+                            "firstname" => $users->firstname,
+                            "lastname" => $users->lastname,
+                            "email" => $users->email
+                        )
+                    );
+                    $jwt = JWT::encode($token, $key);
+                    
+                    // set response code
+                    http_response_code(200);
+                    
+                    $result = array(
+                        "message" => "User was updated.",
+                        "jwt" => $jwt
+                    );
+                }
+                
+                // message if unable to update user
+                else{
+                    // set response code
+                    http_response_code(401);
+                
+                    // show error message
+                    $result = array("message" => "Unable to update user.");
                 }
             }
-            break;
-            case 'DELETE':
-                //error because no id
-                if(!isset($id)) {
-                    http_response_code(510); 
-                    $result = array("message" => "Det gick tyvärr inte att radera");
-                } else {
-                    //delete user with a specific id
-                    if($users->delete($id)) {
-                        http_response_code(200); //ok
-                        $result = array("message" => "Kunde inte radera");
-                    } else {
-                        http_response_code(503); //server error
-                        $result = array("message" => "Det gick inte att radera");
-                    }
-                }
-                break;
+         
+            // if decode fails, it means jwt is invalid
+            catch (Exception $e){
+            
+                // set response code
+                http_response_code(401);
+            
+                //error message
+                $result =array(
+                    "message" => "Access denied.",
+                    "error" => $e->getMessage()
+                );
+            }
+        }
+        else {
+            // set response code
+            http_response_code(401);
+            // message
+            $result = array("message" => "Access denied.");
+        }
+    break;
+    case 'DELETE':
+        //error because no id
+        if(!isset($id)) {
+            http_response_code(510); 
+            $result = array("message" => "Det gick tyvärr inte att radera");
+        } else {
+            //delete user with a specific id
+            if($users->delete($id)) {
+                http_response_code(200); //ok
+                $result = array("message" => "Kunde inte radera");
+            } else {
+                http_response_code(503); //server error
+                $result = array("message" => "Det gick inte att radera");
+            }
+        }
+    break;
 
 }
 

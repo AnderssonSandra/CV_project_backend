@@ -8,6 +8,7 @@ class Projects {
     public $userId;
     public $name;
     public $link;
+    public $github;
     public $techniques;
     public $startDate;
     public $endDate;
@@ -45,6 +46,7 @@ class Projects {
         userId = :userId,
         name = :name,
         link = :link,
+        github = :github,
         techniques = :techniques,
         startDate = :startDate,
         endDate = :endDate,
@@ -58,6 +60,7 @@ class Projects {
         $this->userId=htmlspecialchars(strip_tags($this->userId));
         $this->name=htmlspecialchars(strip_tags($this->name));
         $this->link=htmlspecialchars(strip_tags($this->link));
+        $this->github=htmlspecialchars(strip_tags($this->github));
         $this->techniques=htmlspecialchars(strip_tags($this->techniques));
         $this->startDate=htmlspecialchars(strip_tags($this->startDate));
         $this->endDate=htmlspecialchars(strip_tags($this->endDate));
@@ -67,6 +70,7 @@ class Projects {
         $statement->bindParam(":userId", $this->userId);
         $statement->bindParam(":name", $this->name);
         $statement->bindParam(":link", $this->link);
+        $statement->bindParam(":github", $this->github);
         $statement->bindParam(":techniques", $this->techniques);
         $statement->bindParam(":startDate", $this->startDate);
         $statement->bindParam(":endDate", $this->endDate);
@@ -87,6 +91,7 @@ class Projects {
         userId = :userId,
         name = :name,
         link = :link,
+        github = :github,
         techniques = :techniques,
         startDate = :startDate,
         endDate = :endDate,
@@ -102,6 +107,7 @@ class Projects {
         $this->userId=htmlspecialchars(strip_tags($this->userId));
         $this->name=htmlspecialchars(strip_tags($this->name));
         $this->link=htmlspecialchars(strip_tags($this->link));
+        $this->github=htmlspecialchars(strip_tags($this->github));
         $this->techniques=htmlspecialchars(strip_tags($this->techniques));
         $this->startDate=htmlspecialchars(strip_tags($this->startDate));
         $this->endDate=htmlspecialchars(strip_tags($this->endDate));
@@ -111,6 +117,7 @@ class Projects {
         $statement->bindParam(":userId", $this->userId);
         $statement->bindParam(":name", $this->name);
         $statement->bindParam(":link", $this->link);
+        $statement->bindParam(":github", $this->github);
         $statement->bindParam(":techniques", $this->techniques);
         $statement->bindParam(":startDate", $this->startDate);
         $statement->bindParam(":endDate", $this->endDate);

@@ -1,9 +1,9 @@
 <?php
 
 //require files
-require '../config/Database.php';
-require '../classes/Projects.php';
-require '../classes/ReusableApi.php';
+require 'config/Database.php';
+require 'classes/Projects.php';
+require 'classes/ReusableApi.php';
 
 //create instace of reusable class
 $reusableApi = new ReusableApi();
@@ -54,6 +54,7 @@ switch($method) {
             $projects->userId = $data->userId; 
             $projects->name = $data->name;
             $projects->link = $data->link;
+            $projects->github = $data->github;
             $projects->techniques = $data->techniques;
             $projects->startDate = $data->startDate;
             $projects->endDate = $data->endDate;
@@ -82,6 +83,7 @@ switch($method) {
                 $projects->userId = $data->userId; 
                 $projects->name = $data->name;
                 $projects->link = $data->link;
+                $projects->github = $data->github;
                 $projects->techniques = $data->techniques;
                 $projects->startDate = $data->startDate;
                 $projects->endDate = $data->endDate;

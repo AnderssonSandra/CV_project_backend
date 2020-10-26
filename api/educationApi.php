@@ -1,9 +1,9 @@
 <?php
 
 //require files
-require '../config/Database.php';
-require '../classes/Educations.php';
-require '../classes/ReusableApi.php';
+require 'config/Database.php';
+require 'classes/Educations.php';
+require 'classes/ReusableApi.php';
 
 //create instace of reusable class
 $reusableApi = new ReusableApi();

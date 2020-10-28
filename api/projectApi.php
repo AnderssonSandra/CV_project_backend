@@ -31,16 +31,16 @@ switch($method) {
     //GET
     case 'GET':
         if(isset($id)) {
-            //if there is an id, get specific user
+            //if there is an id, get specific project
             $result =$projects->getOne($id);
         } else {
-            //to get all projects
+            //get all
             $result = $projects->getAll();
         }
         //use function to check if result contain any data
         $reusableApi->getData($result);
         break;
-        //POST
+    //POST
     case 'POST':
         //read submitted data and make php objects
         $data = json_decode(file_get_contents("php://input"));
@@ -51,7 +51,6 @@ switch($method) {
             !empty($data->startDate) &&
             !empty($data->description)
         ){
-            $projects->userId = $data->userId; 
             $projects->name = $data->name;
             $projects->link = $data->link;
             $projects->github = $data->github;
@@ -60,62 +59,61 @@ switch($method) {
             $projects->endDate = $data->endDate;
             $projects->description = $data->description;
         
-            //create user
+            //create project
             if($projects->create()) {
                 http_response_code(201); //created
-                $result = array("message" => "Kursen är skapad");
+                $result = array("message" => "Project is created");
             } else {
                 http_response_code(503); //Server error
-                $result = array("message" => "Det gick tyvärr inte att skapa kursen");
+                $result = array("message" => "Coulden't create Project");
             };
         }
         break;
-        //PUT
-        case 'PUT':
-            //error because no id
-            if(!isset($id)) {
-                http_response_code(510); //not extended
-                $result = array("message" => "kunde inte uppdatera kursen eftersom inget id skickades med");
+    //PUT
+    case 'PUT':
+        //error because no id
+        if(!isset($id)) {
+            http_response_code(510); //not extended
+            $result = array("message" => "Send an ID to update");
+        } else {
+            $data = json_decode(file_get_contents("php://input"));
+
+            //send data to props in class "projects"
+            $projects->name = $data->name;
+            $projects->link = $data->link;
+            $projects->github = $data->github;
+            $projects->techniques = $data->techniques;
+            $projects->startDate = $data->startDate;
+            $projects->endDate = $data->endDate;
+            $projects->description = $data->description;
+
+            //update 
+            if($projects->update($id)) {
+                http_response_code(200); //ok
+                $result = array("message" => "The Project is updated");
             } else {
-                $data = json_decode(file_get_contents("php://input"));
-
-                //send data to props in class "projects"
-                $projects->userId = $data->userId; 
-                $projects->name = $data->name;
-                $projects->link = $data->link;
-                $projects->github = $data->github;
-                $projects->techniques = $data->techniques;
-                $projects->startDate = $data->startDate;
-                $projects->endDate = $data->endDate;
-                $projects->description = $data->description;
-
-                //update 
-                if($projects->update($id)) {
-                    http_response_code(200); //ok
-                    $result = array("message" => "poesten är uppdaterad");
-                } else {
-                    http_response_code(503); //server error
-                    $result = array("message" => "det gick inte att uppdatera posten");
-                }
+                http_response_code(503); //server error
+                $result = array("message" => "Coulden´t update Project");
             }
-            break;
-            case 'DELETE':
-                //error because no id
-                if(!isset($id)) {
-                    http_response_code(510); 
-                    $result = array("message" => "Det gick tyvärr inte att radera");
-                } else {
-                    //delete user with a specific id
-                    if($projects->delete($id)) {
-                        http_response_code(200); //ok
-                        $result = array("message" => "Raderad");
-                    } else {
-                        http_response_code(503); //server error
-                        $result = array("message" => "Det gick inte att radera");
-                    }
-                }
-                break;
-
+        }
+    break;
+    //DELETE
+    case 'DELETE':
+        //error because no id
+        if(!isset($id)) {
+            http_response_code(510); 
+            $result = array("message" => "Send an ID to delete");
+        } else {
+            //delete user with a specific id
+            if($projects->delete($id)) {
+                http_response_code(200); //ok
+                $result = array("message" => "Deleted");
+            } else {
+                http_response_code(503); //server error
+                $result = array("message" => "Coulden´t delete");
+            }
+        }
+    break;
 }
 
 //Return result as JSON

@@ -5,7 +5,6 @@ class Projects {
 
     //props
     public $id;
-    public $userId;
     public $name;
     public $link;
     public $github;
@@ -43,7 +42,6 @@ class Projects {
     function create() {
         $query = "INSERT INTO cv_project 
         SET 
-        userId = :userId,
         name = :name,
         link = :link,
         github = :github,
@@ -57,7 +55,6 @@ class Projects {
         $statement= $this->conn->prepare($query);
 
         //sanitaze from tags 
-        $this->userId=htmlspecialchars(strip_tags($this->userId));
         $this->name=htmlspecialchars(strip_tags($this->name));
         $this->link=htmlspecialchars(strip_tags($this->link));
         $this->github=htmlspecialchars(strip_tags($this->github));
@@ -67,7 +64,6 @@ class Projects {
         $this->description=htmlspecialchars(strip_tags($this->description));
 
         //bind values
-        $statement->bindParam(":userId", $this->userId);
         $statement->bindParam(":name", $this->name);
         $statement->bindParam(":link", $this->link);
         $statement->bindParam(":github", $this->github);
@@ -88,7 +84,6 @@ class Projects {
     function update($id) {
         $query= "UPDATE cv_project
         SET 
-        userId = :userId,
         name = :name,
         link = :link,
         github = :github,
@@ -104,7 +99,6 @@ class Projects {
         $statement= $this->conn->prepare($query);
 
         //sanitaze from tags 
-        $this->userId=htmlspecialchars(strip_tags($this->userId));
         $this->name=htmlspecialchars(strip_tags($this->name));
         $this->link=htmlspecialchars(strip_tags($this->link));
         $this->github=htmlspecialchars(strip_tags($this->github));
@@ -114,7 +108,6 @@ class Projects {
         $this->description=htmlspecialchars(strip_tags($this->description));
 
         //bind values 
-        $statement->bindParam(":userId", $this->userId);
         $statement->bindParam(":name", $this->name);
         $statement->bindParam(":link", $this->link);
         $statement->bindParam(":github", $this->github);

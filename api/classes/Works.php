@@ -5,7 +5,6 @@ class Works {
 
     //props
     public $id;
-    public $userId;
     public $title;
     public $workplace;
     public $startDate;
@@ -18,7 +17,7 @@ class Works {
         $this->conn = $db;
     }
 
-    //get all projects from database
+    //get all work from database
     function getAll() {
         $query = "SELECT * FROM cv_work ORDER BY CASE WHEN endDate = '0000-00-00' THEN 0 ELSE 1 END, endDate DESC";
 
@@ -29,7 +28,7 @@ class Works {
         return $result;
     }
 
-    //get one specific project from database
+    //get one specific work from database
     function getOne($id) {
         $query = "SELECT * FROM cv_work WHERE id = $id";
         $statement = $this->conn->prepare($query);
@@ -38,11 +37,10 @@ class Works {
         return $result;
     }
 
-    //create project
+    //create work
     function create() {
         $query = "INSERT INTO cv_work 
         SET 
-        userId = :userId,
         title = :title,
         workplace = :workplace,
         startDate = :startDate,
@@ -55,7 +53,6 @@ class Works {
         $statement= $this->conn->prepare($query);
 
         //sanitaze from tags 
-        $this->userId=htmlspecialchars(strip_tags($this->userId));
         $this->title=htmlspecialchars(strip_tags($this->title));
         $this->workplace=htmlspecialchars(strip_tags($this->workplace));
         $this->startDate=htmlspecialchars(strip_tags($this->startDate));
@@ -64,7 +61,6 @@ class Works {
         $this->description=htmlspecialchars(strip_tags($this->description));
 
         //bind values
-        $statement->bindParam(":userId", $this->userId);
         $statement->bindParam(":title", $this->title);
         $statement->bindParam(":workplace", $this->workplace);
         $statement->bindParam(":startDate", $this->startDate);
@@ -80,11 +76,10 @@ class Works {
         }
     }
 
-    //update project
+    //update work
     function update($id) {
         $query= "UPDATE cv_work
         SET 
-        userId = :userId,
         title = :title,
         workplace = :workplace,
         startDate = :startDate,
@@ -99,7 +94,6 @@ class Works {
         $statement= $this->conn->prepare($query);
 
         //sanitaze from tags 
-        $this->userId=htmlspecialchars(strip_tags($this->userId));
         $this->title=htmlspecialchars(strip_tags($this->title));
         $this->workplace=htmlspecialchars(strip_tags($this->workplace));
         $this->startDate=htmlspecialchars(strip_tags($this->startDate));
@@ -108,7 +102,6 @@ class Works {
         $this->description=htmlspecialchars(strip_tags($this->description));
 
         //bind values 
-        $statement->bindParam(":userId", $this->userId);
         $statement->bindParam(":title", $this->title);
         $statement->bindParam(":workplace", $this->workplace);
         $statement->bindParam(":startDate", $this->startDate);
@@ -124,7 +117,7 @@ class Works {
         } 
     }
 
-    //delete a specific project
+    //delete a specific work
     function delete($id) {
         $query= "DELETE FROM cv_work WHERE id = $id";
         $statement = $this->conn->prepare($query);

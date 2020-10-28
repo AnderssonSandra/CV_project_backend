@@ -5,7 +5,6 @@ class Educations {
 
     //props
     public $id;
-    public $userId;
     public $education;
     public $school;
     public $startDate;
@@ -17,7 +16,7 @@ class Educations {
         $this->conn = $db;
     }
 
-    //get all projects from database
+    //get all educations from database
     function getAll() {
         $query = "SELECT * FROM cv_education ORDER BY CASE WHEN endDate = '0000-00-00' THEN 0 ELSE 1 END, endDate DESC";
 
@@ -28,7 +27,7 @@ class Educations {
         return $result;
     }
 
-    //get one specific project from database
+    //get one specific education from database
     function getOne($id) {
         $query = "SELECT * FROM cv_education WHERE id = $id";
         $statement = $this->conn->prepare($query);
@@ -37,11 +36,10 @@ class Educations {
         return $result;
     }
 
-    //create project
+    //create education
     function create() {
         $query = "INSERT INTO cv_education 
         SET 
-        userId = :userId,
         education = :education,
         school = :school,
         startDate = :startDate,
@@ -53,7 +51,6 @@ class Educations {
         $statement= $this->conn->prepare($query);
 
         //sanitaze from tags 
-        $this->userId=htmlspecialchars(strip_tags($this->userId));
         $this->education=htmlspecialchars(strip_tags($this->education));
         $this->school=htmlspecialchars(strip_tags($this->school));
         $this->startDate=htmlspecialchars(strip_tags($this->startDate));
@@ -61,7 +58,6 @@ class Educations {
         $this->description=htmlspecialchars(strip_tags($this->description));
 
         //bind values
-        $statement->bindParam(":userId", $this->userId);
         $statement->bindParam(":education", $this->education);
         $statement->bindParam(":school", $this->school);
         $statement->bindParam(":startDate", $this->startDate);
@@ -76,11 +72,10 @@ class Educations {
         }
     }
 
-    //update project
+    //update education
     function update($id) {
         $query= "UPDATE cv_education
         SET 
-        userId = :userId,
         education = :education,
         school = :school,
         startDate = :startDate,
@@ -94,7 +89,6 @@ class Educations {
         $statement= $this->conn->prepare($query);
 
         //sanitaze from tags 
-        $this->userId=htmlspecialchars(strip_tags($this->userId));
         $this->education=htmlspecialchars(strip_tags($this->education));
         $this->school=htmlspecialchars(strip_tags($this->school));
         $this->startDate=htmlspecialchars(strip_tags($this->startDate));
@@ -102,7 +96,6 @@ class Educations {
         $this->description=htmlspecialchars(strip_tags($this->description));
 
         //bind values 
-        $statement->bindParam(":userId", $this->userId);
         $statement->bindParam(":education", $this->education);
         $statement->bindParam(":school", $this->school);
         $statement->bindParam(":startDate", $this->startDate);
@@ -117,7 +110,7 @@ class Educations {
         } 
     }
 
-    //delete a specific project
+    //delete a specific education
     function delete($id) {
         $query= "DELETE FROM cv_education WHERE id = $id";
         $statement = $this->conn->prepare($query);

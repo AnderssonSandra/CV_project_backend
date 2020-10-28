@@ -26,21 +26,21 @@ $db = $database->connect();
 //Create an instance of the class "Educations" and send the db connection as a parameter 
 $educations = new Educations($db);
 
-//swish that us the encloses method
+//switch methods
 switch($method) {
     //GET
     case 'GET':
         if(isset($id)) {
-            //if there is an id, get specific user
+            //if there is an id, get specific education
             $result =$educations->getOne($id);
         } else {
-            //to get all educations
+            //get all 
             $result = $educations->getAll();
         }
         //use function to check if result contain any data
         $reusableApi->getData($result);
         break;
-        //POST
+    //POST
     case 'POST':
         //read submitted data and make php objects
         $data = json_decode(file_get_contents("php://input"));
@@ -52,7 +52,6 @@ switch($method) {
             !empty($data->startDate) &&
             !empty($data->description)
         ){
-            $educations->userId = $data->userId; 
             $educations->education = $data->education;
             $educations->school = $data->school;
             $educations->startDate = $data->startDate;
@@ -66,57 +65,55 @@ switch($method) {
             //create user
             if($educations->create()) {
                 http_response_code(201); //created
-                $result = array("message" => "Kursen är skapad");
+                $result = array("message" => "Education is created");
             } else {
                 http_response_code(503); //Server error
-                $result = array("message" => "Det gick tyvärr inte att skapa kursen");
+                $result = array("message" => "Coulden't create Education");
             };
         }
-        break;
-        //PUT
-        case 'PUT':
-            //error because no id
-            if(!isset($id)) {
-                http_response_code(510); //not extended
-                $result = array("message" => "kunde inte uppdatera kursen eftersom inget id skickades med");
+    break;
+    //PUT
+    case 'PUT':
+        //error because no id
+        if(!isset($id)) {
+            http_response_code(510); //not extended
+            $result = array("message" => "Send an ID to update");
+        } else {
+            $data = json_decode(file_get_contents("php://input"));
+
+            //send data to props in class "educations"
+            $educations->education = $data->education;
+            $educations->school = $data->school;
+            $educations->startDate = $data->startDate;
+            $educations->endDate = $data->endDate;
+            $educations->description = $data->description;
+
+            //update 
+            if($educations->update($id)) {
+                http_response_code(200); //ok
+                $result = array("message" => "The Education is updated");
             } else {
-                $data = json_decode(file_get_contents("php://input"));
-
-                //send data to props in class "educations"
-                $educations->userId = $data->userId; 
-                $educations->education = $data->education;
-                $educations->school = $data->school;
-                $educations->startDate = $data->startDate;
-                $educations->endDate = $data->endDate;
-                $educations->description = $data->description;
-
-                //update 
-                if($educations->update($id)) {
-                    http_response_code(200); //ok
-                    $result = array("message" => "poesten är uppdaterad");
-                } else {
-                    http_response_code(503); //server error
-                    $result = array("message" => "det gick inte att uppdatera posten");
-                }
+                http_response_code(503); //server error
+                $result = array("message" => "Coulden´t update Education");
             }
-            break;
-            case 'DELETE':
-                //error because no id
-                if(!isset($id)) {
-                    http_response_code(510); 
-                    $result = array("message" => "Det gick tyvärr inte att radera");
-                } else {
-                    //delete user with a specific id
-                    if($educations->delete($id)) {
-                        http_response_code(200); //ok
-                        $result = array("message" => "Raderad");
-                    } else {
-                        http_response_code(503); //server error
-                        $result = array("message" => "Det gick inte att radera");
-                    }
-                }
-                break;
-
+        }
+    break;
+    case 'DELETE':
+        //error because no id
+        if(!isset($id)) {
+            http_response_code(510); 
+            $result = array("message" => "Send an ID to delete");
+        } else {
+            //delete user with a specific id
+            if($educations->delete($id)) {
+                http_response_code(200); //ok
+                $result = array("message" => "Deleted");
+            } else {
+                http_response_code(503); //server error
+                $result = array("message" => "Coulden´t delete");
+            }
+        }
+    break;
 }
 
 //Return result as JSON

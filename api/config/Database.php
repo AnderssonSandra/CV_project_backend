@@ -15,7 +15,8 @@ class Database {
     private $username = 'saan1906';
     private $password = '97xgd5u6';
     private $conn;
-*/
+    */
+    
     //connect to database
     public function connect() {
         //close connections

@@ -13,7 +13,7 @@ class ReusableApi {
 
     function setHeaders() {
         header('Content-Type: application/json;'); //json data
-        header('Access-Control-Allow-Origin: *'); //reach from every domain 
+        header('Access-Control-Allow-Origin: http://studenter.miun.se'); //reach from every domain 
         header('Access-Control-Allow-Methods: POST, GET, DELETE, PUT, OPTIONS'); //allow metods
         header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Access-Control-Allow-Origin, Authorization, X-Requested-With'); //allow headers 
     }

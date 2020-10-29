@@ -55,17 +55,21 @@ switch($method) {
             $works->title = $data->title;
             $works->workplace = $data->workplace;
             $works->startDate = $data->startDate;
-            $works->endDate = $data->endDate;
+            if(empty($data->endDate)) {
+                $works->endDate = null;
+            } else {
+                $works->endDate = $data->endDate;
+            }
             $works->buzzwords = $data->buzzwords;
             $works->description = $data->description;
         
             //create work
             if($works->create()) {
                 http_response_code(201); //created
-                $result = array("message" => "Kursen är skapad");
+                $result = array("message" => "Work is created");
             } else {
                 http_response_code(503); //Server error
-                $result = array("message" => "Det gick tyvärr inte att skapa kursen");
+                $result = array("message" => "Coulden't create Work");
             };
         }
     break;
@@ -82,7 +86,11 @@ switch($method) {
             $works->title = $data->title;
             $works->workplace = $data->workplace;
             $works->startDate = $data->startDate;
-            $works->endDate = $data->endDate;
+            if(empty($data->endDate)) {
+                $works->endDate = null;
+            } else {
+                $works->endDate = $data->endDate;
+            }
             $works->buzzwords = $data->buzzwords;
             $works->description = $data->description;
 

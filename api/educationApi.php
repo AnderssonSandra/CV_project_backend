@@ -55,7 +55,11 @@ switch($method) {
             $educations->education = $data->education;
             $educations->school = $data->school;
             $educations->startDate = $data->startDate;
-            $educations->endDate = $data->endDate;
+            if(empty($data->endDate)) {
+                $educations->endDate = null;
+            } else {
+                $educations->endDate = $data->endDate;
+            }
             $educations->description = $data->description;
         
             //set NULL if endDate empty
@@ -85,7 +89,11 @@ switch($method) {
             $educations->education = $data->education;
             $educations->school = $data->school;
             $educations->startDate = $data->startDate;
-            $educations->endDate = $data->endDate;
+            if(empty($data->endDate)) {
+                $educations->endDate = null;
+            } else {
+                $educations->endDate = $data->endDate;
+            }
             $educations->description = $data->description;
 
             //update 

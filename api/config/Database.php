@@ -7,16 +7,15 @@ class Database {
     private $username = 'sandra';
     private $password = 'cv_database_sandra';
     private $conn;
-    
+   
 
     /*database settings miun.se 
     private $host = 'studentmysql.miun.se';
     private $db_name = 'saan1906';
     private $username = 'saan1906';
     private $password = '97xgd5u6';
-    private $conn;
-    */
-    
+    private $conn; */
+
     //connect to database
     public function connect() {
         //close connections

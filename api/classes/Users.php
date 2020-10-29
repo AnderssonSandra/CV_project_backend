@@ -50,10 +50,11 @@ class Users {
 
         //bind values
         $statement->bindParam(":username", $this->username);
+        $statement->bindParam(":password", $this->password);
 
-        //hash password and bind values
+        /*hash password and bind values
         $password_hash = password_hash($this->password, PASSWORD_BCRYPT);
-        $statement->bindParam(':password', $password_hash);
+        $statement->bindParam(':password', $password_hash);*/
 
         //execute query
         if($statement->execute()) {
@@ -82,10 +83,11 @@ class Users {
 
         //bind values 
         $statement->bindParam(":username", $this->username);
-        
-        //hash password and bind values
+        $statement->bindParam(":password", $this->password);
+
+        /*hash password and bind values
         $password_hash = password_hash($this->password, PASSWORD_BCRYPT);
-        $statement->bindParam(':password', $password_hash);
+        $statement->bindParam(':password', $password_hash);*/
 
         //execute query
         if($statement->execute()) {

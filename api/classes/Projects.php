@@ -20,7 +20,7 @@ class Projects {
 
     //get all projects from database
     function getAll() {
-        $query = "SELECT * FROM cv_project ORDER BY CASE WHEN endDate = '0000-00-00' THEN 0 ELSE 1 END, endDate DESC";
+        $query = "SELECT * FROM cv_project ORDER BY CASE WHEN endDate IS NULL THEN 0 ELSE 1 END, endDate DESC";
 
         //prepare and execute statement
         $statement = $this->conn->prepare($query);
@@ -60,7 +60,11 @@ class Projects {
         $this->github=htmlspecialchars(strip_tags($this->github));
         $this->techniques=htmlspecialchars(strip_tags($this->techniques));
         $this->startDate=htmlspecialchars(strip_tags($this->startDate));
-        $this->endDate=htmlspecialchars(strip_tags($this->endDate));
+        if($this->endDate == null) {
+            $this->endDate;
+        } else {
+            $this->endDate=htmlspecialchars(strip_tags($this->endDate));
+        };
         $this->description=htmlspecialchars(strip_tags($this->description));
 
         //bind values
@@ -104,7 +108,11 @@ class Projects {
         $this->github=htmlspecialchars(strip_tags($this->github));
         $this->techniques=htmlspecialchars(strip_tags($this->techniques));
         $this->startDate=htmlspecialchars(strip_tags($this->startDate));
-        $this->endDate=htmlspecialchars(strip_tags($this->endDate));
+        if($this->endDate == null) {
+            $this->endDate;
+        } else {
+            $this->endDate=htmlspecialchars(strip_tags($this->endDate));
+        };
         $this->description=htmlspecialchars(strip_tags($this->description));
 
         //bind values 

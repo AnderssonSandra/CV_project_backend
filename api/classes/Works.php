@@ -19,7 +19,7 @@ class Works {
 
     //get all work from database
     function getAll() {
-        $query = "SELECT * FROM cv_work ORDER BY CASE WHEN endDate = '0000-00-00' THEN 0 ELSE 1 END, endDate DESC";
+        $query = "SELECT * FROM cv_work ORDER BY CASE WHEN endDate IS NULL THEN 0 ELSE 1 END, endDate DESC";
 
         //prepare and execute statement
         $statement = $this->conn->prepare($query);
@@ -56,7 +56,11 @@ class Works {
         $this->title=htmlspecialchars(strip_tags($this->title));
         $this->workplace=htmlspecialchars(strip_tags($this->workplace));
         $this->startDate=htmlspecialchars(strip_tags($this->startDate));
-        $this->endDate=htmlspecialchars(strip_tags($this->endDate));
+        if($this->endDate == null) {
+            $this->endDate;
+        } else {
+            $this->endDate=htmlspecialchars(strip_tags($this->endDate));
+        };
         $this->buzzwords=htmlspecialchars(strip_tags($this->buzzwords));
         $this->description=htmlspecialchars(strip_tags($this->description));
 
@@ -97,7 +101,11 @@ class Works {
         $this->title=htmlspecialchars(strip_tags($this->title));
         $this->workplace=htmlspecialchars(strip_tags($this->workplace));
         $this->startDate=htmlspecialchars(strip_tags($this->startDate));
-        $this->endDate=htmlspecialchars(strip_tags($this->endDate));
+        if($this->endDate == null) {
+            $this->endDate;
+        } else {
+            $this->endDate=htmlspecialchars(strip_tags($this->endDate));
+        };
         $this->buzzwords=htmlspecialchars(strip_tags($this->buzzwords));
         $this->description=htmlspecialchars(strip_tags($this->description));
 

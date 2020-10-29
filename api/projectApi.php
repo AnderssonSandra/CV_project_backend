@@ -56,9 +56,13 @@ switch($method) {
             $projects->github = $data->github;
             $projects->techniques = $data->techniques;
             $projects->startDate = $data->startDate;
-            $projects->endDate = $data->endDate;
+            if(empty($data->endDate)) {
+                $projects->endDate = null;
+            } else {
+                $projects->endDate = $data->endDate;
+            }
             $projects->description = $data->description;
-        
+         
             //create project
             if($projects->create()) {
                 http_response_code(201); //created
@@ -84,7 +88,11 @@ switch($method) {
             $projects->github = $data->github;
             $projects->techniques = $data->techniques;
             $projects->startDate = $data->startDate;
-            $projects->endDate = $data->endDate;
+            if(empty($data->endDate)) {
+                $projects->endDate = null;
+            } else {
+                $projects->endDate = $data->endDate;
+            }
             $projects->description = $data->description;
 
             //update 
